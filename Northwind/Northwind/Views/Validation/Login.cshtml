@@ -1,0 +1,33 @@
+﻿@using Northwind.Models.Validation
+@model Northwind.Models.Validation.Login 
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+<table>
+    @using (Html.BeginForm("Login", "Validation", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <tr>
+            @Html.LabelFor(s => s.Email)
+        </tr>
+
+        <tr>
+            @Html.TextBoxFor(s => s.Email)
+        </tr>
+
+        <tr>
+            @Html.LabelFor(s => s.Password)
+        </tr>
+
+        <tr>
+            @Html.TextBoxFor(s => s.Password)
+        </tr>
+
+        <button type="submit" id="LoginID">Login</button>
+    }
+</table>
