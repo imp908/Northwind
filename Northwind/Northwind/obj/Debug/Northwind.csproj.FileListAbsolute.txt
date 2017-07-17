@@ -71,6 +71,8 @@ G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Nort
 G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\bin\Microsoft.Owin.Security.xml
 G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\bin\Microsoft.Owin.Security.Cookies.xml
 G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\bin\Microsoft.Owin.Security.OAuth.xml
+G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.csprojResolveAssemblyReference.cache
 G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.Migrations.InitialCreate.resources
 G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.csproj.GenerateResource.Cache
-G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.Migrations.m0.resources
+G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.Migrations.m1.resources
+G:\disk\Files\Progects\VS_Files\VS_solutions\Others\MVC\Northwind\Northwind\Northwind\obj\Debug\Northwind.Migrations.m2.resources

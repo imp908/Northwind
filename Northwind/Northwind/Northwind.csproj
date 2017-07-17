@@ -195,17 +195,23 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
-    <Compile Include="Migrations\201707161827504_InitialCreate.cs" />
-    <Compile Include="Migrations\201707161827504_InitialCreate.Designer.cs">
-      <DependentUpon>201707161827504_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201707171848347_InitialCreate.cs" />
+    <Compile Include="Migrations\201707171848347_InitialCreate.Designer.cs">
+      <DependentUpon>201707171848347_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707161907531_m0.cs" />
-    <Compile Include="Migrations\201707161907531_m0.Designer.cs">
-      <DependentUpon>201707161907531_m0.cs</DependentUpon>
+    <Compile Include="Migrations\201707172003524_m1.cs" />
+    <Compile Include="Migrations\201707172003524_m1.Designer.cs">
+      <DependentUpon>201707172003524_m1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707172106281_m2.cs" />
+    <Compile Include="Migrations\201707172106281_m2.Designer.cs">
+      <DependentUpon>201707172106281_m2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Edit\Edit.cs" />
     <Compile Include="Models\Northwind\Category.cs" />
     <Compile Include="Models\Northwind\Customer.cs" />
     <Compile Include="Models\Northwind\CustomerDemographic.cs" />
@@ -268,6 +274,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Validation\Login.cshtml" />
     <Content Include="Views\Validation\Register.cshtml" />
+    <Content Include="Views\Edit\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -281,11 +288,14 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707161827504_InitialCreate.resx">
-      <DependentUpon>201707161827504_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707171848347_InitialCreate.resx">
+      <DependentUpon>201707171848347_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707161907531_m0.resx">
-      <DependentUpon>201707161907531_m0.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201707172003524_m1.resx">
+      <DependentUpon>201707172003524_m1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707172106281_m2.resx">
+      <DependentUpon>201707172106281_m2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

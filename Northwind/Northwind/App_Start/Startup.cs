@@ -13,7 +13,7 @@ namespace Northwind
         {
             // настраиваем контекст и менеджер
             app.CreatePerOwinContext<NorthwindModel>(NorthwindModel.Create);
-            app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
+            app.CreatePerOwinContext<ApplicationUserManager_V>(ApplicationUserManager_V.Create);
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,

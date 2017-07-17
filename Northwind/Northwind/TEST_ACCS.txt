@@ -1,8 +1,0 @@
-test credentials account =>
-email:m@m.su
-password:Qwe12#
-
-Last name first name remind =>
-'Davolio','Nancy'
-'Leverling','Janet'
-'Peacock','Margaret'

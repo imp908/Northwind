@@ -25,54 +25,98 @@ namespace Northwind.Models.Validation
         }
     }
 
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+ 
+    public class ApplicationUserManager_V : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
+        public ApplicationUserManager_V(IUserStore<ApplicationUser> store)
                 : base(store)
         {
         }
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options,
+        public static ApplicationUserManager_V Create(IdentityFactoryOptions<ApplicationUserManager_V> options,
                                                 IOwinContext context)
         {
             NorthwindModel db = context.Get<NorthwindModel>();
-            ApplicationUserManager manager = new ApplicationUserManager(new UserStore<ApplicationUser>(db));
+            ApplicationUserManager_V manager = new ApplicationUserManager_V(new UserStore<ApplicationUser>(db));
             return manager;
         }
+
+        
     }
         
     public class Register
     {
         public virtual Employees employee { get; set; }
+        public int employeeID { get; set; }
 
         [Key]
         public int ID { get; set; }
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage =@"Enter password")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; }      
 
         [Required]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+        [Compare("Password", ErrorMessage = @"Passwords not match ")]
         [DataType(DataType.Password)]
         public string PasswordConfirm { get; set; }
+
+        [Required(ErrorMessage =@"Enter your First name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = @"Enter your Last name")]
+        public string LastName { get; set; }
+
+        public string Message { get; set; }
+      
     }
+
 
     public class Login
     {
-        public Login()
-        {
-            this.Message = null;
-        }
-
+      
         [Key]
         public int ID { get; set; }
-
+        [Required(ErrorMessage =@"Enter your email")]
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage = @"Enter password")]
         [DataType(DataType.Password)]
-        public string Password { get; set; }
+        public string Password { get; set; } 
+        [Required]
+        [Compare("Password", ErrorMessage = @"Passwords not match ")]
+        [DataType(DataType.Password)]
+        public string PasswordConfirm { get; set; }        
 
         public string Message { get; set; }
     }
 
+    public class DbLevel
+    {
+        DbContext db;
+
+        public DbLevel()
+        {
+            db = new NorthwindModel();
+        }
+        public Employees GetEmployee(int EmployeID_)
+        {
+            if((from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).Any())
+            {
+                return (from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).FirstOrDefault();
+            }
+
+            return null;
+        }
+
+        public Employees GetEmployee(Register login_)
+        {
+            if ((from s in db.Set<Employees>()
+            where s.FirstName == login_.FirstName && s.LastName == login_.LastName select s).Any())
+            {
+                return (from s in db.Set<Employees>()
+                    where s.FirstName == login_.FirstName && s.LastName == login_.LastName select s).FirstOrDefault();
+            }
+
+            return null;
+        }
+    }
 }

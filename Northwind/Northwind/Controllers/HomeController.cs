@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace Northwind.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
@@ -20,6 +21,7 @@ namespace Northwind.Controllers
             return View();
         }
 
+        [Authorize]
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
