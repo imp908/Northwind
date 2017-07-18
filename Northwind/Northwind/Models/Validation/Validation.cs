@@ -19,7 +19,9 @@ namespace Northwind.Models.Validation
 
     public class ApplicationUser : IdentityUser
     {
-        public int Year { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
         public ApplicationUser()
         {
         }
@@ -99,24 +101,39 @@ namespace Northwind.Models.Validation
         }
         public Employees GetEmployee(int EmployeID_)
         {
-            if((from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).Any())
+            if ((from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).Any())
             {
                 return (from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).FirstOrDefault();
             }
 
             return null;
         }
-
-        public Employees GetEmployee(Register login_)
+        public Employees GetEmployee(Register register_)
         {
             if ((from s in db.Set<Employees>()
-            where s.FirstName == login_.FirstName && s.LastName == login_.LastName select s).Any())
+                 where s.FirstName == register_.FirstName && s.LastName == register_.LastName
+                 select s).Any())
             {
                 return (from s in db.Set<Employees>()
-                    where s.FirstName == login_.FirstName && s.LastName == login_.LastName select s).FirstOrDefault();
+                        where s.FirstName == register_.FirstName && s.LastName == register_.LastName
+                        select s).FirstOrDefault();
             }
 
             return null;
         }
+        public Employees GetEmployee(ApplicationUser register_)
+        {
+            if ((from s in db.Set<Employees>()
+                 where s.FirstName == register_.FirstName && s.LastName == register_.LastName
+                 select s).Any())
+            {
+                return (from s in db.Set<Employees>()
+                        where s.FirstName == register_.FirstName && s.LastName == register_.LastName
+                        select s).FirstOrDefault();
+            }
+
+            return null;
+        }
+
     }
 }

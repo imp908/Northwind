@@ -37,9 +37,10 @@ namespace Northwind.Controllers
         }
 
         // GET: Validation
-        [AllowAnonymous]
+        [AllowAnonymous]   
         public ActionResult Login()
         {
+          
             Login lg = new Models.Validation.Login();
             if (TempData["Message"] == null)
             {
@@ -58,45 +59,45 @@ namespace Northwind.Controllers
         {
             if(ModelState.IsValid)
             {
-                ApplicationUser user = await UserManager.FindAsync(login_.Email, login_.Password);
+                ApplicationUser user = await UserManager.FindAsync(login_.Email, login_.Password );
 
                 if (user != null)
                 {
                     List<Claim> claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.Email, login_.Email));
+                    claims.Add(new Claim(ClaimTypes.Email, login_.Email, user.FirstName,user.LastName));
                     var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationManager.SignIn(identity);                  
                 
                     if (AuthenticationManager.AuthenticationResponseGrant.Identity.IsAuthenticated)
                     {
-                        DbLevel NW = new DbLevel();
-                        if (TempData["EmployeeID"] != null && (int)TempData["EmployeeID"]!=0)
-                        {
-                            int EmplID = (int)TempData["EmployeeID"];
-                            Employees empl = NW.GetEmployee(EmplID);
-                            if (empl != null)
-                            {
-                                TempData["Message"] = @"Welcome" + empl.FirstName + "!";
-                                return RedirectToAction("Index", "Home");
-                            }
-                            else
-                            {
-                                TempData["Message"] = @"Something werid happened";
-                                return RedirectToAction("Register", "Validation");
-                            }
-                           
-                        }                                                
-                    }
 
+                        DbLevel NW = new DbLevel();
+                        Employees empl = NW.GetEmployee(user);
+
+                        if (empl != null)
+                        {
+                            TempData["Message"] = @"Welcome" + empl.FirstName + "!";
+                            return RedirectToAction("Index", "Home", user.Id);
+                        }
+                        else
+                        {
+                            TempData["Message"] = @"Something werid happened. No employee.";
+                            return RedirectToAction("Register", "Validation");
+                        }                           
+                        
+                    }
+                    else
+                    {
+                        TempData["Message"] = @"User not signed in";
+                    }
                 }
                 else
                 {
-                    TempData["Message"] = @"Wrong password or username";
-                    return RedirectToAction("Register", "Validation");
+                    TempData["Message"] = @"Wrong password or username";                   
                 }
+                TempData["Message"] = @"Not all fields correct";                
             }
-
-            TempData["Message"] = @"Wrong password or username. Are you registered?";
+         
             login_.Message = TempData["Message"] as string;
             return View(login_);
         }
@@ -104,6 +105,7 @@ namespace Northwind.Controllers
 
     
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult Register()
         {
             Register rg = new Models.Validation.Register();
@@ -123,57 +125,52 @@ namespace Northwind.Controllers
             
 
         [HttpPost]
-
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(Register login_)
         {
             if (ModelState.IsValid) 
             {
-
-                ApplicationUser user = new ApplicationUser() { UserName = login_.Email  };
-                IdentityResult result = await UserManager.CreateAsync(user, login_.Password);
+                DbLevel NW = new DbLevel();
+                Employees empl = NW.GetEmployee(login_);
+                ApplicationUser user = new ApplicationUser() {
+                    UserName = login_.Email , FirstName = login_.FirstName , LastName = login_.LastName };
+                               
 
                 NorthwindModel db = new NorthwindModel();
 
-                if (result.Succeeded)
+                if (empl != null) 
                 {
+                    IdentityResult result = await UserManager.CreateAsync(user, login_.Password);
 
-                    DbLevel NW = new DbLevel();                 
-
-                    Employees empl = NW.GetEmployee(login_);
-
-                    if (empl != null)
+                    if (result.Succeeded)
                     {
 
                         login_.Message = empl.FirstName + @" your account created. Login with your credentials";
                         TempData["Message"] = login_.Message;
                         TempData["EmployeeID"] = empl.EmployeeID;
                         return RedirectToAction("Login", "Validation");
-                    }                                                          
-                    else
-                    {
-                        login_.Message = @"Employee not found. Are you working here?";
+                    }          
+                                                                    
+                    if (result.Errors != null && result.Errors.Count() != 0)
+                    {                   
+                        //String buillder ommitted for simplicity.
+                        foreach (string error_ in  (from s in result.Errors select s))
+                        {
+                            login_.Message += " " + error_;
+                        }
+
+                        TempData["Message"] = login_.Message;
                         return RedirectToAction("Register", "Validation");
                     }
                 }
-              
-
-                if (result.Errors != null && result.Errors.Count() != 0)
+                else
                 {
-                   
-
-                    //String buillder ommitted for simplicity.
-                    foreach (string error_ in  (from s in result.Errors select s))
-                    {
-                        login_.Message += " " + error_;
-                    }
-
-                    TempData["Message"] = login_.Message;
-                    return RedirectToAction("Register", "Validation");
-                }
+                    TempData["Message"] = @"Employee not found. Are you working here?";
+                    login_.Message = TempData["Message"] as string;
+                    
+                }               
             }
-
-            login_.Message = @"Register using your email and First and Last name";
-            TempData["Message"] = login_.Message;
+            
             return View(login_);
         }
     }
