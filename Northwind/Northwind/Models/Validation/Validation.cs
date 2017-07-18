@@ -135,5 +135,73 @@ namespace Northwind.Models.Validation
             return null;
         }
 
+        public IQueryable<Order> GetOrders (ApplicationUser user)
+        {
+            IQueryable<Order> orders = null;
+            int emplId = this.GetEmployee(user).EmployeeID;
+
+            orders =
+                (from s in db.Set<Order>().Include(i => i.Order_Details)                 
+                select s).Where(t=>t.EmployeeID == emplId);            
+            return orders;
+        }
+
+        public List<OrderDetail> GetOrderDetail(ApplicationUser user)
+        {
+            int emplId = this.GetEmployee(user).EmployeeID;
+
+            var a =
+                from s in db.Set<Product>()
+                join t in db.Set<Order_Detail>() on s.ProductID equals t.ProductID
+                join t2 in db.Set<Order>() on t.OrderID equals t2.OrderID
+                join t3 in db.Set<Employees>() on t2.EmployeeID equals t3.EmployeeID
+                where t3.EmployeeID == emplId
+                select new
+                {
+                   s.ProductID,t2.OrderID, s.ProductName,t.Quantity,t.UnitPrice,t2.Customer.ContactName                    
+                }
+                ;
+
+            List<OrderDetail> view = new List<OrderDetail>();
+            foreach (var item in a)
+            {
+                view.Add(new OrderDetail
+                {
+                    productID = item.ProductID,
+                    orderID = item.OrderID, 
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    ContactName = item.ContactName
+                });
+            }
+
+            return view;
+        }
+
+       
+
     }
+
+    public class OrderDetail
+    {
+        public int productID { get; set; }
+        public int orderID { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public string ContactName { get; set; }
+    }
+    public class OrderView
+    {
+        public Order order { get; set; }
+        public Employees employee { get; set; }
+        public OrderDetail orderDetail { get; set; }
+
+        public IQueryable<Order> orders { get; set; }
+        public IQueryable<Product> products { get; set; }
+
+        public List<OrderDetail> OrderDetails { get; set; }
+    }
+
 }

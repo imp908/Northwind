@@ -124,6 +124,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -198,19 +199,6 @@
     <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
-    <Compile Include="Migrations\201707171848347_InitialCreate.cs" />
-    <Compile Include="Migrations\201707171848347_InitialCreate.Designer.cs">
-      <DependentUpon>201707171848347_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707172003524_m1.cs" />
-    <Compile Include="Migrations\201707172003524_m1.Designer.cs">
-      <DependentUpon>201707172003524_m1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707172106281_m2.cs" />
-    <Compile Include="Migrations\201707172106281_m2.Designer.cs">
-      <DependentUpon>201707172106281_m2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Edit\Edit.cs" />
     <Compile Include="Models\Northwind\Category.cs" />
     <Compile Include="Models\Northwind\Customer.cs" />
@@ -286,17 +274,6 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707171848347_InitialCreate.resx">
-      <DependentUpon>201707171848347_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707172003524_m1.resx">
-      <DependentUpon>201707172003524_m1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707172106281_m2.resx">
-      <DependentUpon>201707172106281_m2.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -5,6 +5,10 @@ using Northwind.DAL;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.AspNet.Identity;
 
+using System.Web.Helpers;
+using System.Security.Claims;
+
+
 namespace Northwind
 {
     public class Startup
@@ -19,6 +23,9 @@ namespace Northwind
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Validation/Login"),
             });
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+
         }
     }
 }

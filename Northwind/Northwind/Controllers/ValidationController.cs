@@ -57,6 +57,7 @@ namespace Northwind.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(Login login_)
         {
+
             if(ModelState.IsValid)
             {
                 ApplicationUser user = await UserManager.FindAsync(login_.Email, login_.Password );
@@ -64,7 +65,7 @@ namespace Northwind.Controllers
                 if (user != null)
                 {
                     List<Claim> claims = new List<Claim>();
-                    claims.Add(new Claim(ClaimTypes.Email, login_.Email, user.FirstName,user.LastName));
+                    claims.Add(new Claim(ClaimTypes.NameIdentifier, login_.Email)); //, user.FirstName,user.LastName));
                     var identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
                     AuthenticationManager.SignIn(identity);                  
                 
@@ -77,12 +78,12 @@ namespace Northwind.Controllers
                         if (empl != null)
                         {
                             TempData["Message"] = @"Welcome" + empl.FirstName + "!";
-                            return RedirectToAction("Index", "Home", user.Id);
+                            return RedirectToAction("Orders","Edit", new { userID = user.Id } );
                         }
                         else
                         {
                             TempData["Message"] = @"Something werid happened. No employee.";
-                            return RedirectToAction("Register", "Validation");
+                            return View("Register", "Validation");
                         }                           
                         
                     }
@@ -94,8 +95,7 @@ namespace Northwind.Controllers
                 else
                 {
                     TempData["Message"] = @"Wrong password or username";                   
-                }
-                TempData["Message"] = @"Not all fields correct";                
+                }                             
             }
          
             login_.Message = TempData["Message"] as string;
