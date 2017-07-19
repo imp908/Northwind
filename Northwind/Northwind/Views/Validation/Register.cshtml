@@ -2,24 +2,28 @@
 @model Northwind.Models.Validation.Register
 
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Register" + Model.Message;
 }
 
 <h2>Register</h2>
 
-
-<h2>Login</h2>
+<tr>
+    
+    @Html.LabelForModel(Model.Message)
+</tr>
 
 <div>
     @using (Html.BeginForm("Register", "Validation", FormMethod.Post))
     {
-       
+       @Html.AntiForgeryToken()
+
             <div>
                 @Html.LabelFor(s => s.Email)
             </div>
        
             <div>
                 @Html.TextBoxFor(s => s.Email)
+                @Html.ValidationMessageFor(s => s.Email)
             </div>
         
         
@@ -29,6 +33,7 @@
 
             <div>
                 @Html.PasswordFor(s => s.Password)
+                @Html.ValidationMessageFor(s => s.Password)
             </div>
 
 
@@ -38,8 +43,27 @@
 
             <div>
                 @Html.PasswordFor(s => s.PasswordConfirm)
+                @Html.ValidationMessageFor(s => s.PasswordConfirm)
             </div>
 
+
+            <div>
+                @Html.LabelFor(s => s.FirstName)
+            </div>
+
+            <div>
+                @Html.TextBoxFor(s => s.FirstName)
+                @Html.ValidationMessageFor(s => s.FirstName)
+            </div>
+
+            <div>
+                @Html.LabelFor(s => s.LastName)
+            </div>
+
+            <div>
+                @Html.TextBoxFor(s => s.LastName)
+                @Html.ValidationMessageFor(s => s.LastName)
+            </div>
 
 
         <button type="submit" id="RegisterID">Register</button>

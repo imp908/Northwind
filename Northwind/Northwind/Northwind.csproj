@@ -124,6 +124,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -195,17 +196,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValidationController.cs" />
-    <Compile Include="Migrations\201707161827504_InitialCreate.cs" />
-    <Compile Include="Migrations\201707161827504_InitialCreate.Designer.cs">
-      <DependentUpon>201707161827504_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201707161907531_m0.cs" />
-    <Compile Include="Migrations\201707161907531_m0.Designer.cs">
-      <DependentUpon>201707161907531_m0.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Edit\Edit.cs" />
     <Compile Include="Models\Northwind\Category.cs" />
     <Compile Include="Models\Northwind\Customer.cs" />
     <Compile Include="Models\Northwind\CustomerDemographic.cs" />
@@ -268,6 +262,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Validation\Login.cshtml" />
     <Content Include="Views\Validation\Register.cshtml" />
+    <Content Include="Views\Edit\Orders.cshtml" />
+    <Content Include="Views\Edit\Change.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -279,14 +275,6 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201707161827504_InitialCreate.resx">
-      <DependentUpon>201707161827504_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707161907531_m0.resx">
-      <DependentUpon>201707161907531_m0.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
