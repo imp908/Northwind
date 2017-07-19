@@ -1,57 +1,45 @@
 ﻿@using Northwind.Models.Validation
-@model Northwind.Models.Validation.Login     
-
+@model Northwind.Models.Validation.Login
 @{
     ViewBag.Title = "Login";
 }
-
-<h2>Login</h2>
-
-<tr>  
-    @Html.LabelForModel(Model.Message)
-</tr>
 
     @using (Html.BeginForm("Login", "Validation", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
-        <table>           
-
-            <tr>
-                @Html.LabelFor(s => s.Email)
-            </tr>
-
-            <tr>
-                @Html.TextBoxFor(s => s.Email)
-                @Html.ValidationMessageFor(s => s.Email)
-            </tr>
-
-            <tr>
-                @Html.LabelFor(s => s.Password)
-            </tr>
-
-            <tr>
-                @Html.PasswordFor(s => s.Password)
-                @Html.ValidationMessageFor(s => s.Password)
-            </tr>
-
-            <tr>
-                @Html.LabelFor(s => s.PasswordConfirm)
-                @Html.PasswordFor(s => s.PasswordConfirm)
-                @Html.ValidationMessageFor(s => s.PasswordConfirm)
-            </tr>
-        </table>
-        <button type="submit" id="LoginID">Login</button>
+        <div class="wrapper">
+            <form class="form-signin">
+                <h2 class="form-signin-heading">@Html.LabelForModel(Model.Message)</h2>
+                <div class="form-control">
+                    @Html.LabelFor(s => s.Email)
+                    @Html.TextBoxFor(s => s.Email)
+                    @Html.ValidationMessageFor(s => s.Email)               
+                </div>
+                <div class="form-control">
+                    @Html.LabelFor(s => s.Password)
+                    @Html.PasswordFor(s => s.Password)
+                    @Html.ValidationMessageFor(s => s.Password)
+                </div>
+           
+                <div class="form-control">
+                    @Html.LabelFor(s => s.PasswordConfirm)
+                    @Html.PasswordFor(s => s.PasswordConfirm)
+                    @Html.ValidationMessageFor(s => s.PasswordConfirm)
+                </div>            
+                <button type="submit" class="btn btn-lg btn-primary btn-block" id="LoginID">Login</button>
+            </form>
+        </div>
     }
 
 @using (Html.BeginForm("Register", "Validation", FormMethod.Get))
 {
-<div>
-    
-    <table>
-        <tr>
-            <button type="submit" id="RegisterID">Register</button>
-        </tr>
-    </table>
-</div>
+    <div>
+
+        <table>
+            <tr>
+                <button type="submit" class="btn-default alert-info" id="RegisterID">Register</button>
+            </tr>
+        </table>
+    </div>
 }

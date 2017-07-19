@@ -263,6 +263,7 @@
     <Content Include="Views\Validation\Login.cshtml" />
     <Content Include="Views\Validation\Register.cshtml" />
     <Content Include="Views\Edit\Orders.cshtml" />
+    <Content Include="Views\Edit\Change.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

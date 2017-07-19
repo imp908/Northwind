@@ -44,7 +44,7 @@ namespace Northwind.Controllers
             Login lg = new Models.Validation.Login();
             if (TempData["Message"] == null)
             {
-                lg.Message = @"Login with your credentials or register to create account.";
+                lg.Message = @"Login please";
             }
             else {
                 lg.Message = TempData["Message"] as string;
@@ -102,8 +102,14 @@ namespace Northwind.Controllers
             return View(login_);
         }
 
+      
+        public ActionResult LogOut()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Login","Validation");
+        }
 
-    
+
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Register()
@@ -120,9 +126,7 @@ namespace Northwind.Controllers
             }
 
             return View(rg);
-        }
-
-            
+        }            
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -173,5 +177,7 @@ namespace Northwind.Controllers
             
             return View(login_);
         }
+        
+
     }
 }

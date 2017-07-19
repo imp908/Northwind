@@ -52,6 +52,7 @@ namespace Northwind.Models.Validation
 
         [Key]
         public int ID { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
         [Required(ErrorMessage =@"Enter password")]
         [DataType(DataType.Password)]
@@ -72,12 +73,12 @@ namespace Northwind.Models.Validation
       
     }
 
-
     public class Login
     {
       
         [Key]
         public int ID { get; set; }
+        [EmailAddress]
         [Required(ErrorMessage =@"Enter your email")]
         public string Email { get; set; }
         [Required(ErrorMessage = @"Enter password")]
@@ -99,6 +100,7 @@ namespace Northwind.Models.Validation
         {
             db = new NorthwindModel();
         }
+
         public Employees GetEmployee(int EmployeID_)
         {
             if ((from s in db.Set<Employees>() where s.EmployeeID == EmployeID_ select s).Any())
@@ -145,12 +147,11 @@ namespace Northwind.Models.Validation
                 select s).Where(t=>t.EmployeeID == emplId);            
             return orders;
         }
-
-        public List<OrderDetail> GetOrderDetail(ApplicationUser user)
+        public List<OrderDetail> GetOrderDetails(ApplicationUser user)
         {
             int emplId = this.GetEmployee(user).EmployeeID;
 
-            var a =
+            var orderdetails =
                 from s in db.Set<Product>()
                 join t in db.Set<Order_Detail>() on s.ProductID equals t.ProductID
                 join t2 in db.Set<Order>() on t.OrderID equals t2.OrderID
@@ -163,7 +164,7 @@ namespace Northwind.Models.Validation
                 ;
 
             List<OrderDetail> view = new List<OrderDetail>();
-            foreach (var item in a)
+            foreach (var item in orderdetails)
             {
                 view.Add(new OrderDetail
                 {
@@ -178,8 +179,56 @@ namespace Northwind.Models.Validation
 
             return view;
         }
+        public List<OrderDetail> GetOrderDetails(ApplicationUser user,int? pid,int? oid)
+        {
+            int emplId = this.GetEmployee(user).EmployeeID;
 
-       
+            var orderdetails =
+                from s in db.Set<Product>()
+                join t in db.Set<Order_Detail>() on s.ProductID equals t.ProductID
+                join t2 in db.Set<Order>() on t.OrderID equals t2.OrderID
+                join t3 in db.Set<Employees>() on t2.EmployeeID equals t3.EmployeeID
+                where t3.EmployeeID == emplId && t.ProductID == pid && t2.OrderID == oid
+                select new
+                {
+                    s.ProductID,
+                    t2.OrderID,
+                    s.ProductName,
+                    t.Quantity,
+                    t.UnitPrice,
+                    t2.Customer.ContactName
+                }
+                ;
+
+            List<OrderDetail> view = new List<OrderDetail>();
+            foreach (var item in orderdetails)
+            {
+                view.Add(new OrderDetail
+                {
+                    productID = item.ProductID,
+                    orderID = item.OrderID,
+                    ProductName = item.ProductName,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.UnitPrice,
+                    ContactName = item.ContactName
+                });
+            }
+
+            return view;
+        }
+        public Order_Detail SetOrderDetail(OrderDetail od_)
+        {
+            Order_Detail result = null;
+
+            result =
+            (from s in this.db.Set<Order_Detail>()
+            where s.ProductID == od_.productID && s.OrderID == od_.orderID select s).FirstOrDefault();
+            result.Quantity = od_.Quantity;
+
+            this.db.SaveChanges();
+
+            return result;
+        }
 
     }
 
@@ -188,7 +237,8 @@ namespace Northwind.Models.Validation
         public int productID { get; set; }
         public int orderID { get; set; }
         public string ProductName { get; set; }
-        public int Quantity { get; set; }
+        [Range(0, short.MaxValue, ErrorMessage = @"Please enter positive value")]
+        public short Quantity { get; set; }        
         public decimal UnitPrice { get; set; }
         public string ContactName { get; set; }
     }
@@ -202,6 +252,28 @@ namespace Northwind.Models.Validation
         public IQueryable<Product> products { get; set; }
 
         public List<OrderDetail> OrderDetails { get; set; }
+    }
+
+    //custom attribute for action to multiple submit buttons
+    public class MultipleButtonAttribute : System.Web.Mvc.ActionNameSelectorAttribute
+    {
+        public string Name { get; set; }
+        public string Argument { get; set; }
+
+        public override bool IsValidName(System.Web.Mvc.ControllerContext controllerContext, string actionName, System.Reflection.MethodInfo methodInfo)
+        {
+            bool isValidName = false;
+            string keyValue = string.Format("{0}:{1}", Name, Argument);
+            var value = controllerContext.Controller.ValueProvider.GetValue(keyValue);
+
+            if (value != null)
+            {
+                controllerContext.Controller.ControllerContext.RouteData.Values[Name] = Argument;
+                isValidName = true;
+            }
+
+            return isValidName;
+        }
     }
 
 }

@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 
 using Northwind.Models.Validation;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
 
-using Northwind.Models.Validation;
+
+using System.ComponentModel;
+
 
 namespace Northwind.Controllers
 {
@@ -31,31 +34,83 @@ namespace Northwind.Controllers
         // GET: Employee     
         public async Task<ActionResult> Orders(string userID)
         {
+
             OrderView order = new OrderView();
             DbLevel db = new DbLevel();
 
-            var a = User.Identity.Name;
-            var result = await UserManager.FindByIdAsync(userID);
-            if(result!=null)
+            ApplicationUser AppUser = await UserManager.FindByIdAsync(userID);
+            if (AppUser == null) { AppUser = UserManager.FindByName(User.Identity.GetUserId()); }
+       
+            if(AppUser != null)
             {
-                order.orders = db.GetOrders(result);
-                order.employee = db.GetEmployee(result);
-                order.OrderDetails = db.GetOrderDetail(result);
+                order.orders = db.GetOrders(AppUser);
+                order.employee = db.GetEmployee(AppUser);
+                order.OrderDetails = db.GetOrderDetails(AppUser);
+            }else
+            {
+                ModelState.AddModelError("", "Something gone wrong");
             }
+
             return View(order);
         }
 
-        public ActionResult Edit(int pid,int oid,string params_)
+        [HttpGet]
+        public ActionResult Change(int? pid,int? oid)
         {
+            ApplicationUser AppUser = UserManager.FindByName(User.Identity.GetUserId());
+            DbLevel db = new DbLevel();
+            OrderDetail od =
+                db.GetOrderDetails(AppUser,pid,oid).FirstOrDefault();
 
+            return View(od);
+        }
+
+        [HttpPost,ActionName("Change")]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePost(
+        [Bind(Include = "ContactName,ProductName,Quantity,UnitPrice,productID,orderID")] OrderDetail od_)
+        {
+            if (od_.Quantity > 0)
+            {
+                ApplicationUser AppUser = UserManager.FindByName(User.Identity.GetUserId());
+                DbLevel db = new DbLevel();
+
+                try
+                {
+                    db.SetOrderDetail(od_);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Trace.WriteLine(e.Message);
+                }
+
+                OrderDetail od =
+                     db.GetOrderDetails(AppUser, od_.productID, od_.orderID).FirstOrDefault();
+
+                return RedirectToAction("Orders", "Edit");
+            }
+
+            return View(od_);
+        }
+
+        [HttpPost]
+        [MultipleButton(Name = "action", Argument = "Increase")]
+        public ActionResult Increase(int ID, DateTime? DateFrom, DateTime? DateTo)
+        {
+            return View();
+        }
+        [HttpPost]
+        [MultipleButton(Name = "action", Argument = "Decrease")]
+        public ActionResult Decrease(int ID, DateTime? DateFrom, DateTime? DateTo)
+        {
             return View();
         }
 
-        public async Task<ActionResult> GetUser()
-        {           
-            string result_ = @"Annonymous";            
-            return View(result_);
+        public ActionResult GetUserName()
+        {
+            ApplicationUser AppUser =  UserManager.FindByName(User.Identity.GetUserId());
+            string UserName = AppUser.FirstName + @" " + AppUser.LastName;
+            return View(UserName);
         }
-        
     }
 }
